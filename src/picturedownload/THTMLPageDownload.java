@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,15 +12,19 @@ import java.util.Map;
 public class THTMLPageDownload {
 	HttpURLConnection urlcon = null;
 	URL url = null;
-
+	ArrayList	lists=null;
+	
 	static String downloadUrl = "";
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new THTMLPageDownload(downloadUrl);
+		
 	}
 
 	public THTMLPageDownload(String urlString) {
+		lists=new ArrayList<String >();
+		
 		try {
 			url = new URL(urlString);
 			urlcon = (HttpURLConnection) url.openConnection();
@@ -49,6 +54,11 @@ public class THTMLPageDownload {
 				if (null == line) {
 					break;
 				}
+				//	ここで文字列を切り出してファイル名を取り出す
+				if(line.indexOf(".jpg")>0){
+					lists.add(getJpgUrlFromString(line));
+					
+				}
 				System.out.println(line);
 			}
 
@@ -63,6 +73,16 @@ public class THTMLPageDownload {
 			e.printStackTrace();
 		}
 
+	}
+	/**
+	 * JPGのファイル名を取得する
+	 * @param line
+	 * @return
+	 */
+	private Object getJpgUrlFromString(String line) {
+		// TODO Auto-generated method stub
+		
+		return null;
 	}
 
 }
