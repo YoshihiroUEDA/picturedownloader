@@ -13,18 +13,19 @@ public class THTMLPageDownload {
 	HttpURLConnection urlcon = null;
 	URL url = null;
 	ArrayList	lists=null;
+	String saveFolder=null;
 	
 	static String downloadUrl = "";
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new THTMLPageDownload(downloadUrl);
-		
-	}
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//		new THTMLPageDownload(downloadUrl);
+//		
+//	}
 
 	public THTMLPageDownload(String urlString) {
 		lists=new ArrayList<String >();
-		
+	saveFolder=".";	
 		try {
 			url = new URL(urlString);
 			urlcon = (HttpURLConnection) url.openConnection();
@@ -83,6 +84,23 @@ public class THTMLPageDownload {
 		// TODO Auto-generated method stub
 		
 		return null;
+	}
+	/**
+	 * 実際にダウンロードを開始する関数
+	 * 
+	 */
+	public void done() {
+		// TODO Auto-generated method stub
+		
+	}
+	/**
+	 * 保存場所を設定する関数
+	 * パスの区切り文字については、適宜変更する
+	 * @param string　保存場所を指定
+	 */
+	public void setSaveFolder(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
