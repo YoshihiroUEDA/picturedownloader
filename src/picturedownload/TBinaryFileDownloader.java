@@ -12,6 +12,7 @@ public class TBinaryFileDownloader {
 	File outputFile = null;
 	
 	/**
+	 * 
 	 * コンストラクタ
 	 * オブジェクトの初期化処理
 	 * @param _url
