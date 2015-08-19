@@ -1,6 +1,7 @@
 package picturedownload;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
@@ -12,22 +13,60 @@ import java.util.Map;
 public class THTMLPageDownload {
 	HttpURLConnection urlcon = null;
 	URL url = null;
-	ArrayList	lists=null;
-	String saveFolder=null;
-	
+	ArrayList<String> lists = null;
+	String saveFolder = null;
+
 	static String downloadUrl = "";
 
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//		new THTMLPageDownload(downloadUrl);
-//		
-//	}
+	// public static void main(String[] args) {
+	// // TODO Auto-generated method stub
+	// new THTMLPageDownload(downloadUrl);
+	//
+	// }
 
 	public THTMLPageDownload(String urlString) {
-		lists=new ArrayList<String >();
-	saveFolder=".";	
 		try {
 			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("url object created error.");
+			System.exit(-1);
+		}
+		saveFolder = ".";
+
+	}
+
+	/**
+	 * JPGのファイル名を取得する
+	 * 
+	 * 二重引用符で文字列を区切り、その中で、ｈｔｔｐから始まる文字列をURLとして値を返す。
+	 * @param line
+	 * @return URL文字列が入った配列
+	 */
+	private ArrayList<String> getJpgUrlFromString(String line) {
+		// TODO Auto-generated method stub
+		ArrayList<String> localary=new ArrayList<String>();
+		String [] separateLine=line.split("\"");
+		for (int i = 0; i<separateLine.length;i++){
+			if( separateLine[i].indexOf("http")>=0){
+				System.out.println("url ["+separateLine[i]+"]found.");
+				localary.add(separateLine[i]);
+			}
+		}
+		
+		return localary;
+	}
+
+	/**
+	 * 実際にダウンロードを開始する関数
+	 * 
+	 */
+	public void done() {
+		// TODO Auto-generated method stub
+		lists = new ArrayList<String>();
+		try {
+			
 			urlcon = (HttpURLConnection) url.openConnection();
 			urlcon.setRequestMethod("GET");
 			urlcon.setInstanceFollowRedirects(false);
@@ -36,7 +75,7 @@ public class THTMLPageDownload {
 			urlcon.connect();
 
 			Map<String, List<String>> headers = urlcon.getHeaderFields();
-			Iterator it = headers.keySet().iterator();
+			Iterator<String> it = headers.keySet().iterator();
 			System.out.println("response header:");
 			while (it.hasNext()) {
 				String key = (String) it.next();
@@ -55,10 +94,13 @@ public class THTMLPageDownload {
 				if (null == line) {
 					break;
 				}
-				//	ここで文字列を切り出してファイル名を取り出す
-				if(line.indexOf(".jpg")>0){
-					lists.add(getJpgUrlFromString(line));
-					
+				// ここで文字列を切り出してファイル名を取り出す
+				if (line.indexOf(".jpg") > 0) {
+					ArrayList<String> urls = getJpgUrlFromString(line);
+					for( int j =0; j<urls.size();j++){
+						lists.add(urls.get(j));
+					}
+
 				}
 				System.out.println(line);
 			}
@@ -73,34 +115,23 @@ public class THTMLPageDownload {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
-	}
 	/**
-	 * JPGのファイル名を取得する
-	 * @param line
-	 * @return
-	 */
-	private Object getJpgUrlFromString(String line) {
-		// TODO Auto-generated method stub
-		
-		return null;
-	}
-	/**
-	 * 実際にダウンロードを開始する関数
+	 * 保存場所を設定する関数 パスの区切り文字については、適宜変更する
 	 * 
-	 */
-	public void done() {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * 保存場所を設定する関数
-	 * パスの区切り文字については、適宜変更する
-	 * @param string　保存場所を指定
+	 * @param string
+	 *            保存場所を指定
 	 */
 	public void setSaveFolder(String string) {
 		// TODO Auto-generated method stub
-		
+		saveFolder = string;
+
+		File f = new File(saveFolder);
+		if (!f.exists() || !f.isDirectory()) {
+			System.out.println("folder:" + saveFolder + " is error path.");
+			System.exit(-1);
+		}
 	}
 
 }
